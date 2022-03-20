@@ -39,12 +39,24 @@ mtm[CrashMonth == 10, Month := 'Oct']
 mtm[CrashMonth == 11, Month := 'Nov']
 mtm[CrashMonth == 12, Month := 'Dec']
 
+crashes_dt[CrashSever == 'Fatal',.N,.(CrashMonth, Cause1)]
+
+cause = crashes_dt[CrashSever == 'Fatal',.N, Cause1]
+
+crashes_dt[, .N]
+
+cause[order(-N)]
+
 tm_shape(crashes) + tm_dots()
 tm_shape(hwy) + tm_lines()
 
 ggplot(mtm, aes(x = CrashMonth, y = N, group = 1)) +
   geom_line(color = 'blue') +
   geom_point()
+
+crashes_dt[Cause1 == 'Under Influence of Alcohol/Drugs', .N, ]
+
+crashes_dt[UrbanRural == 'Rural' | UrbanRural == 'Urban', .N, .(CrashSever, UrbanRural)]
 
 # Analysis ----
 # Find worst segments based on KABCO
